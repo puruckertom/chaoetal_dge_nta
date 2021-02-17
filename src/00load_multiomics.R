@@ -21,6 +21,7 @@ if(Sys.info()[4]=="LZ2626UTPURUCKE"){
 print(paste("Root directory location: ", chao_root, sep=""))
 
 chao_data_in <- file.path(chao_root, "data_in")
+chao_data_out <- file.path(chao_root, "data_out")
 chao_graphics <- file.path(chao_root, "graphics")
 
 #check to see if directories are accessible
@@ -33,9 +34,12 @@ chao_summary <- read.csv(file.path(chao_data_in,"/SupplTables_v6sh3.csv"), strin
 #add some fields for expression and methylation
 chao_summary$expression <- (chao_summary$deg_score + chao_summary$dem_score)/2
 chao_summary$methylation <- chao_summary$dmg_score
+chao_summary$expression_n <- (chao_summary$n_deg + chao_summary$n_dem)/2
+chao_summary$methylation_n <- chao_summary$n_dmg
 
 # turn schymanski into a factor
 chao_summary$schymanski <- as.factor(as.integer(chao_summary$schymanski))
+chao_summary$selection_tier <- as.factor(as.integer(chao_summary$selection_tier))
 
 # consolidate chemical names and formulas
 chao_summary$chem_name <- as.character(chao_summary$chem_name)
