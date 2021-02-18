@@ -30,6 +30,13 @@ print(paste("check to see if R can access summary file OK: ", boo))
 
 #load latest summary data set from Alex
 chao_summary <- read.csv(file.path(chao_data_in,"/SupplTables_v6sh3.csv"), stringsAsFactors = TRUE)
+View(chao_summary)
+
+#deetection counts
+chao_det_freq <-read.csv(file.path(chao_data_in,"/cluster_pe_v_ct.csv"), stringsAsFactors = TRUE)
+colnames(chao_det_freq)
+chao_det_freq$cluster <- as.factor(chao_det_freq$cluster)
+chao_det_freq$type <- as.factor(chao_det_freq$type)
 
 #add some fields for expression and methylation
 chao_summary$expression <- (chao_summary$deg_score + chao_summary$dem_score)/2

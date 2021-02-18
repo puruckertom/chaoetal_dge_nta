@@ -54,19 +54,19 @@ options(ggrepel.max.overlaps = Inf)
 # interesting rows
 p <- ggplot(data = chao_summary[really_interesting_rows,])
 p_schymanski <- p +
-  geom_point(aes(methylation_n, expression_n, col=selection_tier)) +
+  geom_point(aes(methylation_n, expression_n, col=schymanski)) +
   #geom_point(aes(col=schymanski), size = 3) +
-  geom_text_repel(aes(methylation_n, expression_n, label=chem_name, col=selection_tier), nudge_x = 0.1) +
+  geom_text_repel(aes(methylation_n, expression_n, label=chem_name, col=schymanski), nudge_x = 0.1) +
   xlab("Methylation Score") + 
   ylab("Expression Score") +
-  ggtitle("Interesting Features = non-zero expression AND non-zero methylation AND fold change > +2",
-          subtitle="Plots represent 8 k-means molecular features groups, expression and methylation axes from multiomics score components") + 
+  ggtitle("Non-zero (miRNA/gene) expression AND non-zero methylation AND fold change > +2",
+          subtitle="k-means features groups * schymanski assignments; x=methylation, y=expression") + 
   #geom_point(aes(size=fold_change)) +
   #geom_text(label=chem_name) +
   #geom_point(aes(col=schymanski), size = 3) +
   #scale_color_discrete(name = "schymanski") +
   #facet_wrap(~ feature_cluster) +
-  facet_grid(feature_cluster ~ selection_tier) +
+  facet_grid(feature_cluster ~ schymanski) +
   #theme_tufte()
   theme_fivethirtyeight()
 
