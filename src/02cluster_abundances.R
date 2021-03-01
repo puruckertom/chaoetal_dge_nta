@@ -18,23 +18,41 @@ chaoetal_group_stats <- chao_summary %>%
 chao_table_group_stats_file <- paste(chao_data_out,"/chao_group_stats_table.csv",sep="")
 write.csv(chaoetal_group_stats, chao_table_group_stats_file)
 
+#multiomics score
+omics_score <- as.data.frame(cbind(chao_summary$chem_name, as.numeric(chao_summary$deg_score), as.numeric(chao_summary$dmg_score), as.numeric(chao_summary$dem_score)))
+dim(omics_score)
+colnames(omics_score) <- c("name", "deg_score", "dmg_score", "dem_score")
+omics_score[,4]
+
 #build dataset
-keep_data <- c(7:41,54, 45, 42, 43, 44, 6, 5, 53, 47, 48, 49)
+keep_data <- c(7:41,54, 45, 42, 43, 44, 6, 5, 53, 47, 48, 49, 58)
 cluster_abundances <- chao_summary[,keep_data]
 #View(cluster_abundances)
 dim(cluster_abundances)
-cluster_abundances$feature_means <- rowMeans(cluster_abundances[,1:35])
+cluster_abundances$feature_abundance_means <- rowMeans(cluster_abundances[,1:35])
 
 cluster_abundances$feature_cluster <- as.factor(cluster_abundances$feature_cluster)
 cluster_abundances$feature_cluster
 
 #abundances by cluster group
-p <- ggplot(cluster_abundances, aes(x=feature_cluster, y=feature_means)) + 
+p <- ggplot(cluster_abundances, aes(x=feature_cluster, y=feature_abundance_means)) + 
   geom_boxplot()
 p
 chaoetal_cluster_abundances_jpg <- paste(chao_graphics,"/chaoetal_cluster_abundances.jpg",sep="")
 jpeg(chaoetal_cluster_abundances_jpg, width = 6, height = 4, units = "in",res=600)
   p
+dev.off()
+
+#scatter plot of detection frequency versus multiomics score
+p_point <- ggplot(cluster_abundances, aes(x=total_n, y=multiomics_score)) +
+  scale_shape(solid = FALSE) +
+  #geom_point(size=0) +
+  geom_smooth(color="darkred") +
+  geom_point(data=cluster_abundances, aes(x=total_n, y=multiomics_score, shape=schymanski, col=feature_cluster))
+p_point
+chaoetal_scatter_jpg <- paste(chao_graphics,"/chaoetal_scatter.jpg",sep="")
+jpeg(chaoetal_scatter_jpg, width = 6, height = 4, units = "in",res=600)
+  p_point
 dev.off()
 
 #fold change by cluster group
@@ -106,3 +124,7 @@ p
 p <- ggplot(cluster_abundances, aes(x=feature_cluster, y=multiomics_score)) + 
   geom_boxplot()
 p
+chaoetal_cluster_multiomics_jpg <- paste(chao_graphics,"/chaoetal_cluster_totaldetects.jpg",sep="")
+jpeg(chaoetal_cluster_totaldetects_jpg, width = 6, height = 4, units = "in",res=600)
+p
+dev.off()

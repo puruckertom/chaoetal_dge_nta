@@ -6,6 +6,7 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(ggrepel)
+library(vcd)
 
 print("list of loaded packages: ")
 print((.packages()))
