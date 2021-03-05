@@ -124,7 +124,7 @@ p
 p <- ggplot(cluster_abundances, aes(x=feature_cluster, y=multiomics_score)) + 
   geom_boxplot()
 p
-chaoetal_cluster_multiomics_jpg <- paste(chao_graphics,"/chaoetal_cluster_totaldetects.jpg",sep="")
-jpeg(chaoetal_cluster_totaldetects_jpg, width = 6, height = 4, units = "in",res=600)
-p
+chaoetal_cluster_multiomics_jpg <- paste(chao_graphics,"/chaoetal_cluster_multiomics.jpg",sep="")
+jpeg(chaoetal_cluster_multiomics_jpg, width = 6, height = 4, units = "in",res=600)
+  p
 dev.off()

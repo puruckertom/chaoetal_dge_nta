@@ -12,6 +12,7 @@ colnames(chao_summary)
 keep_columns <- c(56,45, 49, 47, 48, 53, 54, 55)
 chao_summary[,keep_columns]
 
+cluster8 <- which(chao_summary$feature_cluster==8)
 fold_change_gt_4 <- which(chao_summary$fold_change>4)
 fold_change_gt_2 <- which(chao_summary$fold_change>2)
 fold_change_positive <- which(chao_summary$fold_change>0)
@@ -51,7 +52,7 @@ write.csv(chao_summary_interesting, chao_table_interesting_file)
 options(ggrepel.max.overlaps = Inf)
 # p <- ggplot(data = chao_summary)
 
-# interesting rows
+# really interesting rows
 p <- ggplot(data = chao_summary[really_interesting_rows,])
 p_schymanski <- p +
   geom_point(aes(methylation_n, expression_n, col=schymanski)) +
@@ -59,7 +60,7 @@ p_schymanski <- p +
   geom_text_repel(aes(methylation_n, expression_n, label=chem_name, col=schymanski), nudge_x = 0.1) +
   xlab("Methylation Score") + 
   ylab("Expression Score") +
-  ggtitle("Non-zero (miRNA/gene) expression AND non-zero methylation AND fold change > +2",
+  ggtitle("Non-zero (miRNA AND gene) expression AND non-zero methylation AND fold change > +2",
           subtitle="k-means features groups * schymanski assignments; x=methylation, y=expression") + 
   #geom_point(aes(size=fold_change)) +
   #geom_text(label=chem_name) +
@@ -68,12 +69,46 @@ p_schymanski <- p +
   #facet_wrap(~ feature_cluster) +
   facet_grid(feature_cluster ~ schymanski) +
   #theme_tufte()
-  theme_fivethirtyeight()
-
+  theme_classic()
+  #theme_fivethirtyeight()
 p_schymanski
-
-chaoetal_features <- paste(chao_graphics,"/chao_interesting_features.jpg",sep="")
+chaoetal_features <- paste(chao_graphics,"/chao_really_interesting_features.jpg",sep="")
 jpeg(chaoetal_features, width = 12, height = 7, units = "in",res=600)
   p_schymanski
 dev.off()
 
+# merely interesting rows
+p <- ggplot(data = chao_summary[interesting_rows,])
+p_schymanski <- p +
+  geom_point(aes(methylation_n, expression_n, col=schymanski)) +
+  #geom_point(aes(col=schymanski), size = 3) +
+  geom_text_repel(aes(methylation_n, expression_n, label=chem_name, col=schymanski), nudge_x = 0.1) +
+  xlab("Methylation Score") + 
+  ylab("Expression Score") +
+  ggtitle("Non-zero (miRNA OR gene) expression AND non-zero methylation AND fold change > +2",
+          subtitle="k-means features groups * schymanski assignments; x=methylation, y=expression") + 
+  #geom_point(aes(size=fold_change)) +
+  #geom_text(label=chem_name) +
+  #geom_point(aes(col=schymanski), size = 3) +
+  #scale_color_discrete(name = "schymanski") +
+  #facet_wrap(~ feature_cluster) +
+  facet_grid(feature_cluster ~ schymanski) +
+  #theme_tufte()
+  theme_classic()
+#theme_fivethirtyeight()
+p_schymanski
+chaoetal_features <- paste(chao_graphics,"/chao_merely_interesting_features.jpg",sep="")
+jpeg(chaoetal_features, width = 12, height = 7, units = "in",res=600)
+p_schymanski
+dev.off()
+
+# cluster 8 and methylation
+p <- ggplot(data = chao_summary[cluster8,]) +
+  geom_point(aes(methylation_n, fold_change, col=schymanski)) +
+  geom_text_repel(aes(methylation_n, fold_change, label=chem_name, col=schymanski), nudge_x = 0.1) +
+  theme_classic()
+p
+chaoetal_cluster8 <- paste(chao_graphics,"/chao_cluster8.jpg",sep="")
+jpeg(chaoetal_cluster8, width = 7, height = 5, units = "in",res=600)
+  p
+dev.off()
