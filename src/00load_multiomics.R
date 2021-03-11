@@ -26,15 +26,17 @@ chao_data_out <- file.path(chao_root, "data_out")
 chao_graphics <- file.path(chao_root, "graphics")
 
 #check to see if directories are accessible
-boo = file.exists(file.path(chao_data_in,"/SupplTables_v6sh3.csv"))
+boo = file.exists(file.path(chao_data_in,"/SupplTables_v6sh3v2.csv"))
 print(paste("check to see if R can access summary file OK: ", boo))
 
 #load latest summary data set from Alex
-chao_summary <- read.csv(file.path(chao_data_in,"/SupplTables_v6sh3.csv"), stringsAsFactors = TRUE)
-View(chao_summary)
+chao_summary <- read.csv(file.path(chao_data_in,"/SupplTables_v6sh3v2.csv"), stringsAsFactors = TRUE)
+colnames(chao_summary)
+#View(chao_summary)
 
-#deetection counts
+#detection counts
 chao_det_freq <-read.csv(file.path(chao_data_in,"/cluster_pe_v_ct.csv"), stringsAsFactors = TRUE)
+#View(chao_det_freq)
 colnames(chao_det_freq)
 chao_det_freq$cluster <- as.factor(chao_det_freq$cluster)
 chao_det_freq$type <- as.factor(chao_det_freq$type)
@@ -45,9 +47,10 @@ chao_summary$methylation <- chao_summary$dmg_score
 chao_summary$expression_n <- (chao_summary$n_deg + chao_summary$n_dem)/2
 chao_summary$methylation_n <- chao_summary$n_dmg
 
-# turn schymanski into a factor
+# turn schymanski and others into factors
 chao_summary$schymanski <- as.factor(as.integer(chao_summary$schymanski))
 chao_summary$selection_tier <- as.factor(as.integer(chao_summary$selection_tier))
+
 
 # consolidate chemical names and formulas
 chao_summary$chem_name <- as.character(chao_summary$chem_name)
